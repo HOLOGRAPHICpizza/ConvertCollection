@@ -14,6 +14,8 @@ import com.esotericsoftware.minlog.Log;
 
 public final class MP3ify implements Rule {
 	
+	//TODO: implement common object methods
+	
 	private static final String LOGNAME = "MP3ify";
 	
 	private final File src, dest;
@@ -38,7 +40,7 @@ public final class MP3ify implements Rule {
 		return this.src;
 	}
 	
-	public static final class Builder implements RuleBuilder {
+	public static final class Builder implements Rule.Builder {
 		
 		public Builder() {}
 

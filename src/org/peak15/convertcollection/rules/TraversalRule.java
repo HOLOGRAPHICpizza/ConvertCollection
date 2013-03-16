@@ -9,6 +9,9 @@ import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.peak15.convertcollection.FatalConversionException;
 
+/**
+ * singleton plox
+ */
 public abstract class TraversalRule extends DirectoryWalker<File> {
 	
 	protected TraversalRule(IOFileFilter fileFilter, IOFileFilter directoryFilter, int depth) {

@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.peak15.convertcollection.rules.Registry;
 import org.peak15.convertcollection.rules.Rule;
-import org.peak15.convertcollection.rules.RuleBuilder;
 import org.peak15.convertcollection.workset.WorkSet;
 
 import com.esotericsoftware.minlog.Log;
@@ -22,7 +21,7 @@ public class ConvertCollection {
 	private static final String LOGNAME = "ConvertCollection";
 	
 	/**
-	 * @param args Usage: java ConvertCollection rule-name [rule-args...]
+	 * @param args Usage: java ConvertCollection rule-name directory [rule-args...]
 	 */
 	public static void main(String[] args) {
 		Log.set(LOG_LEVEL);
@@ -40,7 +39,7 @@ public class ConvertCollection {
 			throw new IllegalArgumentException("directory must be a readable directory.");
 		}
 		
-		RuleBuilder builder = Registry.getRule(args[0]);
+		Rule.Builder builder = Registry.getRule(args[0]);
 		
 		List<String> newArgs = new LinkedList<>();
 		for(int i = 2; i < args.length; i++) {

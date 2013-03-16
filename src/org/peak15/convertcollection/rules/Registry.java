@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public final class Registry {
 	
-	private static final Map<String, RuleBuilder> rules = new HashMap<>();
+	private static final Map<String, Rule.Builder> rules = new HashMap<>();
 	
 	static {
 		// Register rules here
@@ -21,7 +21,7 @@ public final class Registry {
 		return rules.containsKey(ruleName);
 	}
 	
-	public static RuleBuilder getRule(String ruleName) {
+	public static Rule.Builder getRule(String ruleName) {
 		return rules.get(ruleName);
 	}
 }
