@@ -3,7 +3,7 @@ package org.peak15.convertcollection.rules;
 import java.io.File;
 import java.util.List;
 
-import org.peak15.convertcollection.ConversionException;
+import org.apache.commons.io.DirectoryWalker;
 import org.peak15.convertcollection.FatalConversionException;
 import org.peak15.convertcollection.Procedure;
 
@@ -47,7 +47,13 @@ public final class MP3ify implements Rule {
 
 	@Override
 	public Procedure<File> getProcedure() {
-		
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	@Override
+	public DirectoryWalker<File> getDirectoryWalker() {
+		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 }

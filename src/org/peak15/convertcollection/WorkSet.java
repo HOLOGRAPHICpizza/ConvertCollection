@@ -1,8 +1,8 @@
 package org.peak15.convertcollection;
 
-import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
@@ -22,7 +22,7 @@ public final class WorkSet<T> {
 	// -----------------
 	// Sync These Things
 	// -----------------
-	private final Queue<T> workPool = new ArrayDeque<>();
+	private final Queue<T> workPool = new LinkedList<>();
 	
 	private final Set<Thread> threadPool = new HashSet<>();
 	// -----------------
