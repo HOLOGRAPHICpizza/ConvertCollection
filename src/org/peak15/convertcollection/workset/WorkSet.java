@@ -166,6 +166,5 @@ public final class WorkSet<T> {
 			// No more work
 			signalWorkDone();
 		}
-		
 	}
 }
