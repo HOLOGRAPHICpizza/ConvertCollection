@@ -154,6 +154,7 @@ public final class WorkSet<T> {
 				if(item != null) {
 					// Process item
 					try {
+						Log.trace(logname, "Processing item: " + item);
 						procedure.process(item);
 					} catch (ItemFailedException e) {
 						Log.warn(logname, "Work item failed.", e);

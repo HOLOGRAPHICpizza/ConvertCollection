@@ -6,9 +6,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import org.apache.commons.io.DirectoryWalker;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.peak15.convertcollection.FatalConversionException;
 
 public abstract class TraversalRule extends DirectoryWalker<File> {
+	
+	protected TraversalRule(IOFileFilter fileFilter, IOFileFilter directoryFilter, int depth) {
+		super(fileFilter, directoryFilter, depth);
+	}
 	
 	/**
 	 * @param directory to traverse
@@ -32,6 +37,6 @@ public abstract class TraversalRule extends DirectoryWalker<File> {
 			throw new FatalConversionException("Failed to traverse directory.", e);
 		}
 		
-		return null;
+		return files;
 	}
 }

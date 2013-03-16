@@ -1,9 +1,13 @@
 package org.peak15.convertcollection.rules;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.peak15.convertcollection.FatalConversionException;
+import org.peak15.convertcollection.workset.ItemFailedException;
 import org.peak15.convertcollection.workset.Procedure;
 
 import com.esotericsoftware.minlog.Log;
@@ -17,6 +21,21 @@ public final class MP3ify implements Rule {
 	private MP3ify(File src, File dest) {
 		this.src = src;
 		this.dest = dest;
+	}
+	
+	@Override
+	public Procedure<File> procedure() {
+		return MusicProcedure.INSTANCE;
+	}
+
+	@Override
+	public TraversalRule traversalRule() {
+		return MusicTraversalRule.INSTANCE;
+	}
+
+	@Override
+	public File directory() {
+		return this.src;
 	}
 	
 	public static final class Builder implements RuleBuilder {
@@ -49,21 +68,31 @@ public final class MP3ify implements Rule {
 			return "Usage: java ConvertCollection MP3ify source-dir destination-dir";
 		}
 	}
-
-	@Override
-	public Procedure<File> procedure() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+	
+	private static final class MusicTraversalRule extends TraversalRule {
+		
+		private static final TraversalRule INSTANCE = new MusicTraversalRule();
+		
+		private static final IOFileFilter FILTER = FileFilterUtils.or(
+				FileFilterUtils.suffixFileFilter(".mp3"),
+				FileFilterUtils.suffixFileFilter(".flac"));
+		
+		private MusicTraversalRule() {
+			super(FILTER, null, -1);
+		}
+		
+		@Override
+		protected void handleFile(File file, int depth, Collection<File> results) {
+			results.add(file);
+		}
 	}
+	
+	private static enum MusicProcedure implements Procedure<File> {
+		INSTANCE;
 
-	@Override
-	public TraversalRule traversalRule() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
-
-	@Override
-	public File directory() {
-		return this.src;
+		@Override
+		public void process(File item) throws ItemFailedException {
+			Log.debug(LOGNAME, "PROCESSED FILE " + item);
+		}
 	}
 }
