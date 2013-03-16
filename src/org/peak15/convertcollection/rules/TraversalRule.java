@@ -20,7 +20,8 @@ public abstract class TraversalRule extends DirectoryWalker<File> {
 			throw new NullPointerException("Directory may not be null.");
 		}
 		else if(!(directory.isDirectory() && directory.canRead())) {
-			throw new IllegalArgumentException("directory must be a readable directory.");
+			throw new FatalConversionException(
+					new IllegalArgumentException("directory must be a readable directory."));
 		}
 		
 		Queue<File> files = new LinkedList<>();
