@@ -1,10 +1,13 @@
-package org.peak15.convertcollection;
+package org.peak15.convertcollection.workset;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
+
+import com.esotericsoftware.minlog.Log;
+
 
 /**
  * A set of work that needs to be performed.
@@ -31,6 +34,7 @@ public final class WorkSet<T> {
 	private final Object syncLock = new Object();
 	// -----------------
 	
+	private boolean partialFailure = false;
 	
 	public WorkSet<T> add(T item) {
 		if(item == null) {
@@ -56,11 +60,12 @@ public final class WorkSet<T> {
 	 * Process all work using this procedure. (Block until all is done.)
 	 * After this, the set is empty and ready for more work.
 	 * 
+	 * @return true on complete success, false on partial failure.
 	 * @throws InterruptedException if the user gets impatient waiting for this to return and wants to cancel.
 	 * 		The active threads will be told to cleanly abandon or finish their current work item,
 	 * 		and all queued work items will be discarded. 
 	 */
-	public void execute(Procedure<T> procedure) throws InterruptedException {
+	public boolean execute(Procedure<T> procedure) throws InterruptedException {
 		if(procedure == null) {
 			throw new NullPointerException("Procedure may not be null.");
 		}
@@ -97,6 +102,10 @@ public final class WorkSet<T> {
 		
 		// Clear the thread pool just in case, obsolete references suck.
 		this.threadPool.clear();
+		
+		boolean ret = !partialFailure;
+		partialFailure = false;
+		return ret;
 	}
 	
 	/**
@@ -118,10 +127,13 @@ public final class WorkSet<T> {
 		}
 	}
 	
+	private static int threadSerial = 0;
 	private final class Worker<U> implements Runnable {
 		
 		private final Queue<U> workPool;
 		private final Procedure<U> procedure;
+		
+		private final String logname = "Worker Thread " + threadSerial++;
 		
 		private Worker(Queue<U> workPool, Procedure<U> procedure) {
 			this.workPool = workPool;
@@ -138,7 +150,12 @@ public final class WorkSet<T> {
 				}
 				if(item != null) {
 					// Process item
-					procedure.process(item);
+					try {
+						procedure.process(item);
+					} catch (ItemFailedException e) {
+						Log.warn(logname, "Work item failed.", e);
+						partialFailure = true;
+					}
 				}
 			}
 			

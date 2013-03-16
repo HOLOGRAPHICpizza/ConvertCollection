@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.io.DirectoryWalker;
 import org.peak15.convertcollection.FatalConversionException;
-import org.peak15.convertcollection.Procedure;
+import org.peak15.convertcollection.workset.Procedure;
 
 public final class MP3ify implements Rule {
 	

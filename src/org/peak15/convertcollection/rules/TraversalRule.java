@@ -1,4 +1,4 @@
-package org.peak15.convertcollection;
+package org.peak15.convertcollection.rules;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import org.apache.commons.io.DirectoryWalker;
+import org.peak15.convertcollection.FatalConversionException;
 
 public abstract class TraversalRule extends DirectoryWalker<File> {
 	

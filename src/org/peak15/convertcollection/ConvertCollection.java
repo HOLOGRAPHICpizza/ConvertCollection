@@ -7,17 +7,26 @@ import java.util.List;
 import org.peak15.convertcollection.rules.Registry;
 import org.peak15.convertcollection.rules.Rule;
 import org.peak15.convertcollection.rules.RuleBuilder;
+import org.peak15.convertcollection.workset.WorkSet;
+
+import com.esotericsoftware.minlog.Log;
 
 public class ConvertCollection {	
+	
+	private static final int LOG_LEVEL = Log.LEVEL_TRACE;
 	
 	private static final int EXIT_SUCCESS = 0;
 	private static final int EXIT_FAILURE = 1;
 	private static final int EXIT_PARTIAL_SUCCESS = 2;
 	
+	private static final String LOGNAME = "ConvertCollection";
+	
 	/**
 	 * @param args Usage: java ConvertCollection rule-name [rule-args...]
 	 */
 	public static void main(String[] args) {
+		Log.set(LOG_LEVEL);
+		
 		if(args.length < 2) {
 			throw new IllegalArgumentException("Usage: java ConvertCollection rule-name directory [rule-args...]");
 		}
@@ -38,7 +47,7 @@ public class ConvertCollection {
 			newArgs.add(args[i]);
 		}
 		
-		int exitStatus = EXIT_SUCCESS;
+		int exitStatus = EXIT_FAILURE;
 		
 		try {
 			Rule rule = builder.build(dir, newArgs);
@@ -50,7 +59,14 @@ public class ConvertCollection {
 			
 			// Execute Work Set
 			try {
-				ws.execute(rule.getProcedure());
+				if(ws.execute(rule.getProcedure())) {
+					Log.info(LOGNAME, "Success: All items processed!");
+					exitStatus = EXIT_SUCCESS;
+				}
+				else {
+					Log.warn(LOGNAME, "Partial Success: One or more items failed to process.");
+					exitStatus = EXIT_PARTIAL_SUCCESS;
+				}
 			} catch (InterruptedException e) {
 				// The user got impatient and wants to cancel.
 				// All work has been stopped.
@@ -58,9 +74,7 @@ public class ConvertCollection {
 			}
 		}
 		catch(FatalConversionException e) {
-			System.err.println("Fatal conversion exception!");
-			e.printStackTrace();
-			exitStatus = EXIT_FAILURE;
+			Log.error(LOGNAME, "Fatal conversion exception!", e);
 		}
 		
 		System.exit(exitStatus);
