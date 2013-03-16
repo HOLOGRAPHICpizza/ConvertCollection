@@ -54,12 +54,12 @@ public class ConvertCollection {
 			
 			WorkSet<File> ws = new WorkSet<>();
 			
-			// Walk dir, put files in work set
-			//TODO: walk with apache dirwalker
+			// Walk Directory, add files to work set
+			ws.add(rule.traversalRule().filesOf(rule.directory()));
 			
 			// Execute Work Set
 			try {
-				if(ws.execute(rule.getProcedure())) {
+				if(ws.execute(rule.procedure())) {
 					Log.info(LOGNAME, "Success: All items processed!");
 					exitStatus = EXIT_SUCCESS;
 				}

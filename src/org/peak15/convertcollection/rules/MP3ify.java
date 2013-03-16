@@ -46,7 +46,7 @@ public final class MP3ify implements Rule {
 	}
 
 	@Override
-	public Procedure<File> getProcedure() {
+	public Procedure<File> procedure() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
