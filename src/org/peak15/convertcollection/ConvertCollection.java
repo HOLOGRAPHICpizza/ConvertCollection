@@ -1,10 +1,8 @@
 package org.peak15.convertcollection;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.peak15.convertcollection.rules.Registry;
 import org.peak15.convertcollection.rules.Rule;
@@ -40,6 +38,8 @@ public class ConvertCollection {
 			newArgs.add(args[i]);
 		}
 		
+		int exitStatus = EXIT_SUCCESS;
+		
 		try {
 			Rule rule = builder.build(dir, newArgs);
 			
@@ -54,15 +54,15 @@ public class ConvertCollection {
 			} catch (InterruptedException e) {
 				// The user got impatient and wants to cancel.
 				// All work has been stopped.
-				System.err.println("Interrupted! All work has been canceled.");
-				e.printStackTrace();
-				System.exit(EXIT_PARTIAL_SUCCESS);
+				throw new FatalConversionException("Interrupted! All work has been canceled.", e);
 			}
 		}
 		catch(FatalConversionException e) {
-			System.err.println("Fatal conversion error!");
+			System.err.println("Fatal conversion exception!");
 			e.printStackTrace();
-			System.exit(EXIT_FAILURE);
+			exitStatus = EXIT_FAILURE;
 		}
+		
+		System.exit(exitStatus);
 	}
 }
