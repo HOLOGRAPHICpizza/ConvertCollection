@@ -2,6 +2,7 @@
 *.jardesc
 bin/
 doc/
+lib/
 .classpath
 .project
 

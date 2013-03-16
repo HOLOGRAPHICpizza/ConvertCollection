@@ -1,8 +1,10 @@
 package org.peak15.convertcollection;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.peak15.convertcollection.rules.Registry;
 import org.peak15.convertcollection.rules.Rule;
@@ -37,8 +39,17 @@ public class ConvertCollection {
 		try {
 			Rule rule = builder.build(dir, newArgs);
 			
-			// Walk dir
-			//TODO: Walk dir, with thread pool.
+			// Thread Pool
+			// Each thread takes work from the pool and processes it.
+			// If the work pool is empty it calls 
+			int threads = Runtime.getRuntime().availableProcessors();
+			Set<Runnable> 
+			
+			// Work Pool
+			Set<File> workPool = Collections.synew HashSet<>();
+			
+			// Walk dir, put files in work pool
+			//TODO: walk with apache dirwalker
 		}
 		catch(FatalConversionException e) {
 			System.err.println("Fatal conversion error!");

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.peak15.convertcollection.ConversionException;
 import org.peak15.convertcollection.FatalConversionException;
+import org.peak15.convertcollection.Procedure;
 
 public final class MP3ify implements Rule {
 	
@@ -45,8 +46,7 @@ public final class MP3ify implements Rule {
 	}
 
 	@Override
-	public void process(File file)
-			throws ConversionException, FatalConversionException {
+	public Procedure<File> getProcedure() {
 		
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
