@@ -19,15 +19,18 @@ public final class MP3ify implements Rule {
 	private static final String LOGNAME = "MP3ify";
 	
 	private final File src, dest;
+	private final Procedure<File> procedure;
 	
 	private MP3ify(File src, File dest) {
 		this.src = src;
 		this.dest = dest;
+		
+		procedure = new MusicProcedure(this.dest);
 	}
 	
 	@Override
 	public Procedure<File> procedure() {
-		return MusicProcedure.INSTANCE;
+		return procedure;
 	}
 
 	@Override
@@ -35,14 +38,20 @@ public final class MP3ify implements Rule {
 		return MusicTraversalRule.INSTANCE;
 	}
 
+	/**
+	 * source directory
+	 */
 	@Override
 	public File directory() {
 		return this.src;
 	}
 	
-	public static final class Builder implements Rule.Builder {
-		
-		public Builder() {}
+	public static Rule.Builder builder() {
+		return MusicBuilder.INSTANCE;
+	}
+	
+	private static enum MusicBuilder implements Rule.Builder {
+		INSTANCE;
 
 		@Override
 		public Rule build(File directory, List<String> args) throws FatalConversionException {
@@ -89,12 +98,22 @@ public final class MP3ify implements Rule {
 		}
 	}
 	
-	private static enum MusicProcedure implements Procedure<File> {
-		INSTANCE;
-
+	private static final class MusicProcedure implements Procedure<File> {
+		
+		private final File dest;
+		
+		private MusicProcedure(File dest) {
+			this.dest = dest;
+			
+			//TODO: Remove dummy access
+			if(this.dest == null) {}
+		}
+		
 		@Override
 		public void process(File item) throws ItemFailedException {
 			Log.debug(LOGNAME, "PROCESSED FILE " + item);
 		}
+		
+		
 	}
 }

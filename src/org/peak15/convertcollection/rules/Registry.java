@@ -14,7 +14,7 @@ public final class Registry {
 	
 	static {
 		// Register rules here
-		rules.put("mp3ify", new MP3ify.Builder());
+		rules.put("mp3ify", MP3ify.builder());
 	}
 	
 	public static boolean hasRule(String ruleName) {
