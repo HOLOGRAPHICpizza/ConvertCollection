@@ -12,6 +12,10 @@ import org.peak15.convertcollection.rules.RuleBuilder;
 
 public class ConvertCollection {	
 	
+	private static final int EXIT_SUCCESS = 0;
+	private static final int EXIT_FAILURE = 1;
+	private static final int EXIT_PARTIAL_SUCCESS = 2;
+	
 	/**
 	 * @param args Usage: java ConvertCollection rule-name [rule-args...]
 	 */
@@ -39,22 +43,26 @@ public class ConvertCollection {
 		try {
 			Rule rule = builder.build(dir, newArgs);
 			
-			// Thread Pool
-			// Each thread takes work from the pool and processes it.
-			// If the work pool is empty it calls 
-			int threads = Runtime.getRuntime().availableProcessors();
-			Set<Runnable> 
+			WorkSet<File> ws = new WorkSet<>();
 			
-			// Work Pool
-			Set<File> workPool = Collections.synew HashSet<>();
-			
-			// Walk dir, put files in work pool
+			// Walk dir, put files in work set
 			//TODO: walk with apache dirwalker
+			
+			// Execute Work Set
+			try {
+				ws.execute(rule.getProcedure());
+			} catch (InterruptedException e) {
+				// The user got impatient and wants to cancel.
+				// All work has been stopped.
+				System.err.println("Interrupted! All work has been canceled.");
+				e.printStackTrace();
+				System.exit(EXIT_PARTIAL_SUCCESS);
+			}
 		}
 		catch(FatalConversionException e) {
 			System.err.println("Fatal conversion error!");
 			e.printStackTrace();
-			System.exit(1);
+			System.exit(EXIT_FAILURE);
 		}
 	}
 }
