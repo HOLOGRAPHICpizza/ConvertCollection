@@ -12,6 +12,10 @@ public final class Registry {
 	
 	private static final Map<String, Rule.Builder> rules = new HashMap<>();
 	
+	private Registry() {
+		throw new RuntimeException("Attempted to instantiate Registry.");
+	}
+	
 	static {
 		// Register rules here
 		rules.put("mp3ify", MP3ify.builder());

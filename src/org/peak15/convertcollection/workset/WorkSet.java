@@ -16,6 +16,10 @@ import com.esotericsoftware.minlog.Log;
  * 
  * Not thread safe.
  * 
+ * Each instance of WorkSet is inherently unique.
+ * 
+ * Can be filled and emptied multiple times.
+ * 
  * @param T the type of the problems to solve (type of work set elements)
  */
 public final class WorkSet<T> {
@@ -35,7 +39,13 @@ public final class WorkSet<T> {
 	private final Object syncLock = new Object();
 	// -----------------
 	
+	private static int threadSerial = 0;
+	
 	private boolean partialFailure = false;
+	
+	public WorkSet() {
+		// undefined behavior is teh suck
+	}
 	
 	public WorkSet<T> add(T item) {
 		if(item == null) {
@@ -130,7 +140,11 @@ public final class WorkSet<T> {
 		}
 	}
 	
-	private static int threadSerial = 0;
+	/**
+	 * Each instance is inherently unique.
+	 * 
+	 * @param <U> type of work items
+	 */
 	private final class Worker<U> implements Runnable {
 		
 		private final Queue<U> workPool;

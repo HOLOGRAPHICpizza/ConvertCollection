@@ -10,7 +10,7 @@ import org.peak15.convertcollection.workset.WorkSet;
 
 import com.esotericsoftware.minlog.Log;
 
-public class ConvertCollection {	
+public final class ConvertCollection {	
 	
 	private static final int LOG_LEVEL = Log.LEVEL_TRACE;
 	
@@ -19,6 +19,10 @@ public class ConvertCollection {
 	private static final int EXIT_PARTIAL_SUCCESS = 2;
 	
 	private static final String LOGNAME = "ConvertCollection";
+	
+	private ConvertCollection() {
+		throw new RuntimeException("Attempted to instantiate ConvertCollection.");
+	}
 	
 	/**
 	 * @param args Usage: java ConvertCollection rule-name directory [rule-args...]

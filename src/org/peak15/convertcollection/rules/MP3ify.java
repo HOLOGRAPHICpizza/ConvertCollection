@@ -12,6 +12,9 @@ import org.peak15.convertcollection.workset.Procedure;
 
 import com.esotericsoftware.minlog.Log;
 
+/**
+ * Instances are immutable value types.
+ */
 public final class MP3ify implements Rule {
 	
 	//TODO: implement common object methods
@@ -80,6 +83,9 @@ public final class MP3ify implements Rule {
 		}
 	}
 	
+	/**
+	 * singleton
+	 */
 	private static final class MusicTraversalRule extends TraversalRule {
 		
 		private static final TraversalRule INSTANCE = new MusicTraversalRule();
@@ -98,22 +104,61 @@ public final class MP3ify implements Rule {
 		}
 	}
 	
+	/**
+	 * Each instance is an immutable value type.
+	 * 
+	 * Although it is private, instances of it are passed out.
+	 */
 	private static final class MusicProcedure implements Procedure<File> {
 		
 		private final File dest;
 		
-		private MusicProcedure(File dest) {
-			this.dest = dest;
+		public MusicProcedure(File destination) {
+			if(destination == null) {
+				throw new NullPointerException("destination may not be null.");
+			}
 			
-			//TODO: Remove dummy access
-			if(this.dest == null) {}
+			this.dest = destination;
+		}
+		
+		public File destination() {
+			return this.dest;
 		}
 		
 		@Override
 		public void process(File item) throws ItemFailedException {
+			if(item == null) {
+				throw new NullPointerException("item may not be null.");
+			}
+			
 			Log.debug(LOGNAME, "PROCESSED FILE " + item);
 		}
 		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj == this) {
+				return true;
+			}
+			
+			if(!(obj instanceof MusicProcedure)) {
+				return false;
+			}
+			
+			MusicProcedure mp = (MusicProcedure) obj;
+			
+			return	mp.destination().equals(this.destination());
+		}
 		
+		@Override
+		public int hashCode() {
+			int result = 9001;
+			result = 1327 * result + this.destination().hashCode();
+			return result;
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("(MusicProcedure | destination: %s)", this.destination());
+		}
 	}
 }
