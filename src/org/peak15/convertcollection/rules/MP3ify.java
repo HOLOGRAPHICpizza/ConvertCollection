@@ -6,7 +6,11 @@ import java.util.List;
 import org.peak15.convertcollection.FatalConversionException;
 import org.peak15.convertcollection.workset.Procedure;
 
+import com.esotericsoftware.minlog.Log;
+
 public final class MP3ify implements Rule {
+	
+	private static final String LOGNAME = "MP3ify";
 	
 	private final File src, dest;
 	
@@ -34,6 +38,8 @@ public final class MP3ify implements Rule {
 				throw new FatalConversionException(
 						new IllegalArgumentException("destination-dir must be a directory with read/write access."));
 			}
+			
+			Log.info(LOGNAME, "Ready to convert from " + src + " to " + dest + ".");
 			
 			return new MP3ify(src, dest);
 		}

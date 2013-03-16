@@ -21,6 +21,7 @@ import com.esotericsoftware.minlog.Log;
 public final class WorkSet<T> {
 	
 	private static final int THREADS = Runtime.getRuntime().availableProcessors();
+	private static final String LOGNAME = "WorkSet";
 	
 	// -----------------
 	// Sync These Things
@@ -69,6 +70,8 @@ public final class WorkSet<T> {
 		if(procedure == null) {
 			throw new NullPointerException("Procedure may not be null.");
 		}
+		
+		Log.debug(LOGNAME, "Processing " + workPool.size() + " items with " + THREADS + " threads.");
 		
 		// spawn threads to pull from the work pool
 		// get a lock so the workers can't prematurely notify
