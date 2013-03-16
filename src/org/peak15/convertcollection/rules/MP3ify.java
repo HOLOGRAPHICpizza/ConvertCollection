@@ -17,8 +17,6 @@ import com.esotericsoftware.minlog.Log;
  */
 public final class MP3ify implements Rule {
 	
-	//TODO: implement common object methods
-	
 	private static final String LOGNAME = "MP3ify";
 	
 	private final File src, dest;
@@ -47,6 +45,42 @@ public final class MP3ify implements Rule {
 	@Override
 	public File directory() {
 		return this.src;
+	}
+	
+	/**
+	 * @return destination directory
+	 */
+	public File destination() {
+		return this.dest;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		}
+		
+		if(!(obj instanceof MP3ify)) {
+			return false;
+		}
+		
+		MP3ify mp3 = (MP3ify) obj;
+		
+		return	mp3.destination().equals(this.destination())
+				&& mp3.directory().equals(this.directory());
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 9001;
+		result = 1327 * result + this.destination().hashCode();
+		result = 1327 * result + this.directory().hashCode();
+		return result;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("(MP3ify Rule | src: %s, dest: %s)", this.directory(), this.destination());
 	}
 	
 	public static Rule.Builder builder() {
