@@ -6,16 +6,19 @@ import java.util.List;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.peak15.convertcollection.ConversionRule;
 import org.peak15.convertcollection.FatalConversionException;
-import org.peak15.convertcollection.workset.ItemFailedException;
-import org.peak15.convertcollection.workset.Procedure;
+import org.peak15.convertcollection.TraversalRule;
+import org.peak15.convertcollection.WorkSet.ItemFailedException;
+import org.peak15.convertcollection.WorkSet.Procedure;
 
 import com.esotericsoftware.minlog.Log;
 
 /**
  * Instances are immutable value types.
  */
-public final class MP3ify implements Rule {
+public final class MP3ify implements ConversionRule {
+	// tested via RuleTests
 	
 	private static final String LOGNAME = "MP3ify";
 	
@@ -43,14 +46,14 @@ public final class MP3ify implements Rule {
 	 * source directory
 	 */
 	@Override
-	public File directory() {
+	public File sourceDirectory() {
 		return this.src;
 	}
-	
+
 	/**
 	 * @return destination directory
 	 */
-	public File destination() {
+	public File destinationDirectory() {
 		return this.dest;
 	}
 	
@@ -66,34 +69,36 @@ public final class MP3ify implements Rule {
 		
 		MP3ify mp3 = (MP3ify) obj;
 		
-		return	mp3.destination().equals(this.destination())
-				&& mp3.directory().equals(this.directory());
+		return	mp3.destinationDirectory().equals(this.destinationDirectory())
+				&& mp3.sourceDirectory().equals(this.sourceDirectory());
 	}
 	
 	@Override
 	public int hashCode() {
 		int result = 9001;
-		result = 1327 * result + this.destination().hashCode();
-		result = 1327 * result + this.directory().hashCode();
+		result = 1327 * result + this.destinationDirectory().hashCode();
+		result = 1327 * result + this.sourceDirectory().hashCode();
 		return result;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(MP3ify Rule | src: %s, dest: %s)", this.directory(), this.destination());
+		return String.format("(MP3ify ConversionRule | src: %s, dest: %s)", this.sourceDirectory(), this.destinationDirectory());
 	}
 	
-	public static Rule.Builder builder() {
+	public static ConversionRule.Builder builder() {
 		return MusicBuilder.INSTANCE;
 	}
 	
-	private static enum MusicBuilder implements Rule.Builder {
+	private static enum MusicBuilder implements ConversionRule.Builder {
 		INSTANCE;
 
 		@Override
-		public Rule build(File directory, List<String> args) throws FatalConversionException {
-			// directory is checked upstream
-			File src = directory;
+		public ConversionRule build(File sourceDirectory, List<String> args) throws FatalConversionException {
+			if(!(sourceDirectory.isDirectory() && sourceDirectory.canRead() && sourceDirectory.canWrite())) {
+				throw new IllegalArgumentException("sourceDirectory must be a directory with read/write permissions.");
+			}
+			File src = sourceDirectory;
 			
 			if(args.size() < 1) {
 				throw new FatalConversionException(new IllegalArgumentException(usage()));
@@ -103,7 +108,7 @@ public final class MP3ify implements Rule {
 			
 			if(!(dest.isDirectory() && dest.canRead() && dest.canWrite())) {
 				throw new FatalConversionException(
-						new IllegalArgumentException("destination-dir must be a directory with read/write access."));
+						new IllegalArgumentException("destinationDirectory must be a directory with read/write access."));
 			}
 			
 			Log.info(LOGNAME, "Ready to convert from " + src + " to " + dest + ".");
@@ -113,7 +118,7 @@ public final class MP3ify implements Rule {
 		
 		@Override
 		public String usage() {
-			return "Usage: java ConvertCollection MP3ify source-dir destination-dir";
+			return "Usage: java ConvertCollection MP3ify sourceDirectory destinationDirectory";
 		}
 	}
 	

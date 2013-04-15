@@ -1,20 +1,20 @@
-package org.peak15.convertcollection.rules;
+package org.peak15.convertcollection;
 
 import java.io.File;
 import java.util.List;
 
-import org.peak15.convertcollection.FatalConversionException;
-import org.peak15.convertcollection.workset.Procedure;
+import org.peak15.convertcollection.WorkSet.Procedure;
 
 /**
  * This is a value type, implementing classes should implement common object methods.
  */
-public interface Rule {
+public interface ConversionRule {
+	// tested via RuleTests
 	
 	/**
 	 * @return the directory this rule operates on.
 	 */
-	File directory();
+	File sourceDirectory();
 	
 	/**
 	 * @return procedure to run on each file
@@ -27,11 +27,11 @@ public interface Rule {
 	TraversalRule traversalRule();
 	
 	/**
-	 * A singleton class which constructs immutable Rule instances.
+	 * A singleton class which constructs immutable ConversionRule instances.
 	 */
 	public static interface Builder {
 		
-		Rule build(File directory, List<String> args) throws FatalConversionException;
+		ConversionRule build(File sourceDirectory, List<String> args) throws FatalConversionException;
 		
 		String usage();
 	}

@@ -3,7 +3,7 @@ package org.peak15.convertcollection.test;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.peak15.convertcollection.workset.WorkSet;
+import org.peak15.convertcollection.WorkSet;
 
 /**
  * Fill up a pool, execute it, check for right answer.

@@ -10,21 +10,21 @@ import java.util.List;
 import java.util.Queue;
 
 import org.junit.Test;
+import org.peak15.convertcollection.ConversionRule;
 import org.peak15.convertcollection.FatalConversionException;
 import org.peak15.convertcollection.rules.MP3ify;
-import org.peak15.convertcollection.rules.Rule;
 
 /**
- * use MP3ify for exemplar Rule and TraversalRule
+ * use MP3ify for exemplar ConversionRule and TraversalRule
  * 
- * Rule
+ * ConversionRule
  * use value type template
  * test all 3 methods
  * 
  * TraversalRule
  * check filesOf
  */
-public class RuleTests extends ValueTypeTest<Rule> {
+public class RuleTests extends ValueTypeTest<ConversionRule> {
 	
 	private static final File SOURCE_DIR = new File("");
 	private static final String DESTINATION_DIR = "";
@@ -36,7 +36,7 @@ public class RuleTests extends ValueTypeTest<Rule> {
 	
 	@Test
 	public void testDirectory() {
-		assertEquals(SOURCE_DIR, a.directory());
+		assertEquals(SOURCE_DIR, a.sourceDirectory());
 	}
 	
 	@Test
@@ -55,10 +55,10 @@ public class RuleTests extends ValueTypeTest<Rule> {
 	}
 
 	@Override
-	protected Rule A() {
+	protected ConversionRule A() {
 		List<String> args = Collections.singletonList(DESTINATION_DIR);
 		
-		Rule ret = null;
+		ConversionRule ret = null;
 		try {
 			ret = MP3ify.builder().build(SOURCE_DIR, args);
 		} catch (FatalConversionException e) {
@@ -70,10 +70,10 @@ public class RuleTests extends ValueTypeTest<Rule> {
 	}
 
 	@Override
-	protected Rule D() {
+	protected ConversionRule D() {
 		List<String> args = Collections.singletonList(DESTINATION_DIR_2);
 		
-		Rule ret = null;
+		ConversionRule ret = null;
 		try {
 			ret = MP3ify.builder().build(SOURCE_DIR, args);
 		} catch (FatalConversionException e) {

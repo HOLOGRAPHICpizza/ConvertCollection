@@ -1,4 +1,4 @@
-package org.peak15.convertcollection.rules;
+package org.peak15.convertcollection;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,9 +7,9 @@ import java.util.Queue;
 
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.peak15.convertcollection.FatalConversionException;
 
 public abstract class TraversalRule extends DirectoryWalker<File> {
+	// tested via RuleTests
 	
 	protected TraversalRule(IOFileFilter fileFilter, IOFileFilter directoryFilter, int depth) {
 		super(fileFilter, directoryFilter, depth);

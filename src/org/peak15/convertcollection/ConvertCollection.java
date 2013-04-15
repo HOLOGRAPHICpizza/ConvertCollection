@@ -5,12 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.peak15.convertcollection.rules.Registry;
-import org.peak15.convertcollection.rules.Rule;
-import org.peak15.convertcollection.workset.WorkSet;
 
 import com.esotericsoftware.minlog.Log;
 
-public final class ConvertCollection {	
+public final class ConvertCollection {
+	// no test necessary
 	
 	private static final int LOG_LEVEL = Log.LEVEL_TRACE;
 	
@@ -39,11 +38,7 @@ public final class ConvertCollection {
 		
 		File dir = new File(args[1]);
 		
-		if(!(dir.isDirectory() && dir.canRead())) {
-			throw new IllegalArgumentException("directory must be a readable directory.");
-		}
-		
-		Rule.Builder builder = Registry.getRule(args[0]);
+		ConversionRule.Builder builder = Registry.getRule(args[0]);
 		
 		List<String> newArgs = new LinkedList<>();
 		for(int i = 2; i < args.length; i++) {
@@ -53,27 +48,15 @@ public final class ConvertCollection {
 		int exitStatus = EXIT_FAILURE;
 		
 		try {
-			Rule rule = builder.build(dir, newArgs);
+			ConversionRule rule = builder.build(dir, newArgs);
 			
-			WorkSet<File> ws = new WorkSet<>();
-			
-			// Walk Directory, add files to work set
-			ws.add(rule.traversalRule().filesOf(rule.directory()));
-			
-			// Execute Work Set
-			try {
-				if(ws.execute(rule.procedure())) {
-					Log.info(LOGNAME, "Success: All items processed!");
-					exitStatus = EXIT_SUCCESS;
-				}
-				else {
-					Log.warn(LOGNAME, "Partial Success: One or more items failed to process.");
-					exitStatus = EXIT_PARTIAL_SUCCESS;
-				}
-			} catch (InterruptedException e) {
-				// The user got impatient and wants to cancel.
-				// All work has been stopped.
-				throw new FatalConversionException("Interrupted! All work has been canceled.", e);
+			if(ConversionRuleRunner.run(rule)) {
+				Log.info(LOGNAME, "Success: All items processed!");
+				exitStatus = EXIT_SUCCESS;
+			}
+			else {
+				Log.warn(LOGNAME, "Partial Success: One or more items failed to process.");
+				exitStatus = EXIT_PARTIAL_SUCCESS;
 			}
 		}
 		catch(FatalConversionException e) {

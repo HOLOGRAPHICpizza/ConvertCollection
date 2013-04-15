@@ -1,4 +1,4 @@
-package org.peak15.convertcollection.workset;
+package org.peak15.convertcollection;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,6 +23,7 @@ import com.esotericsoftware.minlog.Log;
  * @param T the type of the problems to solve (type of work set elements)
  */
 public final class WorkSet<T> {
+	// tested via WorkSetTest
 	
 	private static final int THREADS = Runtime.getRuntime().availableProcessors();
 	private static final String LOGNAME = "WorkSet";
@@ -179,6 +180,27 @@ public final class WorkSet<T> {
 			
 			// No more work
 			signalWorkDone();
+		}
+	}
+	
+	public static interface Procedure<U> {
+		void process(U item) throws ItemFailedException;
+	}
+	
+	public static class ItemFailedException extends Exception {
+
+		private static final long serialVersionUID = 2494926818047335373L;
+
+		public ItemFailedException(String message) {
+			super(message);
+		}
+		
+		public ItemFailedException(String message, Throwable e) {
+			super(message, e);
+		}
+		
+		public ItemFailedException(Throwable e) {
+			super(e);
 		}
 	}
 }
