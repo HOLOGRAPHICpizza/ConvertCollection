@@ -68,6 +68,10 @@ public final class WorkSet<T> {
 		return this;
 	}
 	
+	public Set<T> items() {
+		return new HashSet<T>(workPool);
+	}
+	
 	/**
 	 * Process all work using this procedure. (Block until all is done.)
 	 * After this, the set is empty and ready for more work.
