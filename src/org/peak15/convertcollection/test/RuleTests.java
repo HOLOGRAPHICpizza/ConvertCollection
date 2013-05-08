@@ -1,7 +1,6 @@
 package org.peak15.convertcollection.test;
 
 import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;

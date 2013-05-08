@@ -5,6 +5,7 @@ doc/
 lib/
 .classpath
 .project
+test/*/dest
 
 #*#
 *~
