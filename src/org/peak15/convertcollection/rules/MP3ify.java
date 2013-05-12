@@ -125,9 +125,9 @@ public final class MP3ify implements ConversionRule {
 	/**
 	 * singleton
 	 */
-	private static final class MusicTraversalRule extends TraversalRule {
+	public static final class MusicTraversalRule extends TraversalRule {
 		
-		private static final TraversalRule INSTANCE = new MusicTraversalRule();
+		public static final TraversalRule INSTANCE = new MusicTraversalRule();
 		
 		private static final IOFileFilter FILTER = FileFilterUtils.or(
 				FileFilterUtils.suffixFileFilter(".mp3"),
